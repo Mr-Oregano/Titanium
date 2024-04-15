@@ -1,0 +1,89 @@
+
+// All primitives types have defaults and are listed below
+a: int8;     // default: 0
+b: int16;    // default: 0
+c: int32;    // default: 0
+d: int64;    // default: 0
+
+e: uint8;    // default: 0
+f: uint16;   // default: 0
+g: uint32;   // default: 0
+h: uint64;   // default: 0
+
+i: bool;     // default: false
+
+j: float16;  // default: 0.0
+k: float32;  // default: 0.0
+l: float64;  // default: 0.0
+
+m: char;     // default: '\0'
+
+// Everything else is a compound type which MUST have a value assigned at initialization
+s: string = "hello"; 
+// s2: string; // ERROR! 's2' is not a nullable or primitive type so a value MUST be assigned
+
+// If the intention is to default a compound type to "no-value" then it should be made clear by making it nullable
+s3: string?; // Ok! 's3' will be "no-value" by default
+
+// Using str in any expresion will require the programmer to explicitly check for a value before use
+// This reduces the chances of a sneaky 'nullref'.
+
+if (!s3 or s3)
+{
+    print(!s3);
+}
+else
+{
+    print('no value');
+}
+
+// Users can define custom types as a class
+
+class Person
+{
+    age: uint8;
+    name: string;
+    updates: uint32 = 0;
+
+    // Even though string is not nullable, we can delegate initialization to the member initializer in the ctor
+    // Since the variable can never be used until after. 
+    //
+    ctor(age: uint8, name: string)
+     : age(age), name(name) {}
+
+    // If a non-nullable variable is not initialized inline then it MUST be initialized in the ctor's member initializer
+    //
+    // ctor() {} // ERROR! 'str2' is not a nullable or primitive type so a value MUST be assigned
+}
+
+p: Person = new Person(22, "Sam");
+// p2: Person; // ERROR! 'p2' is not a nullable or primitive type so a value MUST be assigned
+p3; Person?; // Ok! 'p3' will be "no-value" by default
+
+// Users can define enums
+
+enum Weekdays extends uint8
+{
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY
+}
+
+// Users can define type unions
+
+union ValueOrError
+{
+    error_code: uint16;
+    value: string;
+}
+
+// Users can define functions
+
+fun add(float32 a, float32 b): int32
+{
+    return a + b;
+}

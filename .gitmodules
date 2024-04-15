@@ -1,0 +1,4 @@
+[submodule "titanium-tests/vendor/Unity"]
+	path = titanium-tests/vendor/Unity
+	url = git@github.com:Mr-Oregano/Unity.git
+	branch = premake-support
