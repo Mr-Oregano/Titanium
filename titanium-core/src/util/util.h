@@ -20,13 +20,13 @@
   ((byte) & 0x02 ? '1' : '0'), \
   ((byte) & 0x01 ? '1' : '0') 
 
-#define i2f(in) _Generic((in),        \
-                    uint32_t: i2f_32, \
-                    uint64_t: i2f_64)(in)
+#define u2f(in) _Generic((in),        \
+                    uint32_t: u2f_32, \
+                    uint64_t: u2f_64)(in)
 
-#define f2i(in) _Generic((in),        \
-                    float:  f2i_32,   \
-                    double: f2i_64)(in)
+#define f2u(in) _Generic((in),        \
+                    float:  f2u_32,   \
+                    double: f2u_64)(in)
 
 #define u2s(in) _Generic((in),        \
                     uint32_t: u2s_32, \
@@ -52,30 +52,30 @@ static inline void *reallocate(void *ptr, size_t new_size)
     return new_ptr;
 }
 
-// Floating-point to integer conversions
+// Integer/floating-point conversions
 
-static ATTR_FORCE_INLINE float i2f_32(uint32_t in)
+static ATTR_FORCE_INLINE float u2f_32(uint32_t in)
 {
     float out;
     memcpy(&out, &in, sizeof(out));
     return out;
 }
 
-static ATTR_FORCE_INLINE double i2f_64(uint64_t in)
+static ATTR_FORCE_INLINE double u2f_64(uint64_t in)
 {
     double out;
     memcpy(&out, &in, sizeof(out));
     return out;
 }
 
-static ATTR_FORCE_INLINE uint32_t f2i_32(float in)
+static ATTR_FORCE_INLINE uint32_t f2u_32(float in)
 {
     uint32_t out;
     memcpy(&out, &in, sizeof(out));
     return out;
 }
 
-static ATTR_FORCE_INLINE uint64_t f2i_64(double in)
+static ATTR_FORCE_INLINE uint64_t f2u_64(double in)
 {
     uint64_t out;
     memcpy(&out, &in, sizeof(out));

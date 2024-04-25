@@ -71,8 +71,8 @@ static ATTR_FORCE_INLINE void op_i64toi32()
 
 static ATTR_FORCE_INLINE void op_f64tof32()
 {
-    double value = i2f(stack_pop_uint64(&titan.stack));
-    stack_push_uint32(&titan.stack, f2i(d2f(value)));
+    double value = u2f(stack_pop_uint64(&titan.stack));
+    stack_push_uint32(&titan.stack, f2u(d2f(value)));
 }
 
 //
@@ -273,30 +273,30 @@ static ATTR_FORCE_INLINE void op_u64rem()
 
 static ATTR_FORCE_INLINE void op_f32add()
 {
-    float v2 = i2f(stack_pop_uint32(&titan.stack));
-    float v1 = i2f(stack_pop_uint32(&titan.stack));
-    stack_push_uint32(&titan.stack, f2i(v1 + v2));
+    float v2 = u2f(stack_pop_uint32(&titan.stack));
+    float v1 = u2f(stack_pop_uint32(&titan.stack));
+    stack_push_uint32(&titan.stack, f2u(v1 + v2));
 }
 
 static ATTR_FORCE_INLINE void op_f32sub()
 {
-    float v2 = i2f(stack_pop_uint32(&titan.stack));
-    float v1 = i2f(stack_pop_uint32(&titan.stack));
-    stack_push_uint32(&titan.stack, f2i(v1 - v2));
+    float v2 = u2f(stack_pop_uint32(&titan.stack));
+    float v1 = u2f(stack_pop_uint32(&titan.stack));
+    stack_push_uint32(&titan.stack, f2u(v1 - v2));
 }
 
 static ATTR_FORCE_INLINE void op_f32mul()
 {
-    float v2 = i2f(stack_pop_uint32(&titan.stack));
-    float v1 = i2f(stack_pop_uint32(&titan.stack));
-    stack_push_uint32(&titan.stack, f2i(v1 * v2));
+    float v2 = u2f(stack_pop_uint32(&titan.stack));
+    float v1 = u2f(stack_pop_uint32(&titan.stack));
+    stack_push_uint32(&titan.stack, f2u(v1 * v2));
 }
 
 static ATTR_FORCE_INLINE void op_f32div()
 {
-    float v2 = i2f(stack_pop_uint32(&titan.stack));
-    float v1 = i2f(stack_pop_uint32(&titan.stack));
-    stack_push_uint32(&titan.stack, f2i(v1 / v2));
+    float v2 = u2f(stack_pop_uint32(&titan.stack));
+    float v1 = u2f(stack_pop_uint32(&titan.stack));
+    stack_push_uint32(&titan.stack, f2u(v1 / v2));
 }
 
 
@@ -304,30 +304,30 @@ static ATTR_FORCE_INLINE void op_f32div()
 
 static ATTR_FORCE_INLINE void op_f64add()
 {
-    double v2 = i2f(stack_pop_uint64(&titan.stack));
-    double v1 = i2f(stack_pop_uint64(&titan.stack));
-    stack_push_uint64(&titan.stack, f2i(v1 + v2));
+    double v2 = u2f(stack_pop_uint64(&titan.stack));
+    double v1 = u2f(stack_pop_uint64(&titan.stack));
+    stack_push_uint64(&titan.stack, f2u(v1 + v2));
 }
 
 static ATTR_FORCE_INLINE void op_f64sub()
 {
-    double v2 = i2f(stack_pop_uint64(&titan.stack));
-    double v1 = i2f(stack_pop_uint64(&titan.stack));
-    stack_push_uint64(&titan.stack, f2i(v1 - v2));
+    double v2 = u2f(stack_pop_uint64(&titan.stack));
+    double v1 = u2f(stack_pop_uint64(&titan.stack));
+    stack_push_uint64(&titan.stack, f2u(v1 - v2));
 }
 
 static ATTR_FORCE_INLINE void op_f64mul()
 {
-    double v2 = i2f(stack_pop_uint64(&titan.stack));
-    double v1 = i2f(stack_pop_uint64(&titan.stack));
-    stack_push_uint64(&titan.stack, f2i(v1 * v2));
+    double v2 = u2f(stack_pop_uint64(&titan.stack));
+    double v1 = u2f(stack_pop_uint64(&titan.stack));
+    stack_push_uint64(&titan.stack, f2u(v1 * v2));
 }
 
 static ATTR_FORCE_INLINE void op_f64div()
 {
-    double v2 = i2f(stack_pop_uint64(&titan.stack));
-    double v1 = i2f(stack_pop_uint64(&titan.stack));
-    stack_push_uint64(&titan.stack, f2i(v1 / v2));
+    double v2 = u2f(stack_pop_uint64(&titan.stack));
+    double v1 = u2f(stack_pop_uint64(&titan.stack));
+    stack_push_uint64(&titan.stack, f2u(v1 / v2));
 }
 
 
@@ -347,14 +347,14 @@ static ATTR_FORCE_INLINE void op_i64neg()
 
 static ATTR_FORCE_INLINE void op_f32neg()
 {
-    float value = i2f(stack_pop_uint32(&titan.stack));
-    stack_push_uint32(&titan.stack, f2i(-value));
+    float value = u2f(stack_pop_uint32(&titan.stack));
+    stack_push_uint32(&titan.stack, f2u(-value));
 }
 
 static ATTR_FORCE_INLINE void op_f64neg()
 {
-    double value = i2f(stack_pop_uint64(&titan.stack));
-    stack_push_uint64(&titan.stack, f2i(-value));
+    double value = u2f(stack_pop_uint64(&titan.stack));
+    stack_push_uint64(&titan.stack, f2u(-value));
 }
 
 //
@@ -405,8 +405,8 @@ static ATTR_FORCE_INLINE void op_u64cmp()
 
 static ATTR_FORCE_INLINE void op_f32cmp()
 {
-    float v2 = i2f(stack_pop_uint32(&titan.stack));
-    float v1 = i2f(stack_pop_uint32(&titan.stack));
+    float v2 = u2f(stack_pop_uint32(&titan.stack));
+    float v1 = u2f(stack_pop_uint32(&titan.stack));
 
     titan.cmp = 0;
     SET_LT_BIT(v1 < v2);
@@ -416,8 +416,8 @@ static ATTR_FORCE_INLINE void op_f32cmp()
 
 static ATTR_FORCE_INLINE void op_f64cmp()
 {
-    double v2 = i2f(stack_pop_uint64(&titan.stack));
-    double v1 = i2f(stack_pop_uint64(&titan.stack));
+    double v2 = u2f(stack_pop_uint64(&titan.stack));
+    double v1 = u2f(stack_pop_uint64(&titan.stack));
 
     titan.cmp = 0;
     SET_LT_BIT(v1 < v2);
