@@ -1,4 +1,6 @@
 
+// TODO: Define value/reference semantics for types or for expressions?
+
 // All primitives types have defaults and are listed below
 a: int8;     // default: 0
 b: int16;    // default: 0
@@ -19,71 +21,93 @@ l: float64;  // default: 0.0
 m: char;     // default: '\0'
 
 // Everything else is a compound type which MUST have a value assigned at initialization
-s: string = "hello"; 
-// s2: string; // ERROR! 's2' is not a nullable or primitive type so a value MUST be assigned
+s: String = "hello"; 
+// s2: String; // ERROR! 's2' is not an optional or primitive type so a value MUST be assigned
 
-// If the intention is to default a compound type to "no-value" then it should be made clear by making it nullable
-s3: string?; // Ok! 's3' will be "no-value" by default
+// If the intention is to have an optional value then it must be explicitly denoted as 'Maybe<T>' 
+// or marked with a '?'
 
-// Using str in any expresion will require the programmer to explicitly check for a value before use
-// This reduces the chances of a sneaky 'nullref'.
+s3: String?; // Ok! 's3' will be 'None' by default
+// or...
+// s3 = Maybe<String>.None;
 
-if (!s3 or s3)
+// Using s3 in any expression will require the programmer to explicitly check for a value before use
+// This ultimately eliminates those godforsaken "null reference exceptions" to the extent that the programmer
+// writes proper handling of code for this edge case.
+
+// Maybe types can still be used in a match expression context or by using Maybe<T>'s utility functions
+
+match (s3)
 {
-    print(!s3);
-}
-else
-{
-    print('no value');
-}
-
-// Users can define custom types as a class
-
-class Person
-{
-    age: uint8;
-    name: string;
-    updates: uint32 = 0;
-
-    // Even though string is not nullable, we can delegate initialization to the member initializer in the ctor
-    // Since the variable can never be used until after. 
-    //
-    ctor(age: uint8, name: string)
-     : age(age), name(name) {}
-
-    // If a non-nullable variable is not initialized inline then it MUST be initialized in the ctor's member initializer
-    //
-    // ctor() {} // ERROR! 'str2' is not a nullable or primitive type so a value MUST be assigned
+    Some(s: String) -> println(s);
+    _               -> println('no value');
 }
 
-p: Person = new Person(22, "Sam");
-// p2: Person; // ERROR! 'p2' is not a nullable or primitive type so a value MUST be assigned
-p3; Person?; // Ok! 'p3' will be "no-value" by default
-
-// Users can define enums
-
-enum Weekdays extends uint8
-{
-    MONDAY,
-    TUESDAY,
-    WEDNESDAY,
-    THURSDAY,
-    FRIDAY,
-    SATURDAY,
-    SUNDAY
-}
-
-// Users can define type unions
-
-union ValueOrError
-{
-    error_code: uint16;
-    value: string;
-}
+s4: String = s3.get("Your mom"); // Will use "Your mom" as the value if s3 is not present.
 
 // Users can define functions
 
 fun add(float32 a, float32 b): int32
 {
     return a + b;
+}
+
+// Users can define custom compound types as a class. There are no constructors in this language, 
+// instead we have a special `make` function that acts like a static factory function. Data members
+// are by-default private (inaccessible outside of class definition).
+// 
+
+class Person
+{
+    name: String;
+    age: uint8;
+    height: float32;
+
+    // Even though String is not nullable, we can delegate initialization to the member initializer in make
+    // Since the variable can never be used until after. If a non-nullable variable is not initialized inline 
+    // then it MUST be initialized in the ctor's member initializer.
+    //
+    make(name: String, age: uint8, height: float32): Person?
+    {
+        return age <= 0 or height <= 0 ? 
+            None : 
+            Some { name, age, height } ;
+            // Some { age, height }; // ERROR! 'name' is not a nullable, primitive type or given a default so a value MUST be assigned
+    }
+}
+
+p = make Person("Sam", 22, 5.3);
+// p2: Person; // ERROR! 'p2' is not a nullable or primitive type so a value MUST be assigned
+p3: Person?; // Ok! 'p3' will be "no-value" by default
+
+// Users can define enums
+
+enum Weekday
+{
+    MON,
+    TUE,
+    WED,
+    THU,
+    FRI,
+    SAT,
+    SUN
+}
+
+// Enums and associated values can only be examined within a `match` context expression.
+// Matching must be exhaustive!
+w = Weekday.MON;
+match (w)
+{
+    MON             -> println("Hell nah");
+    TUE, WED, THU   -> println("Whatever");
+    FRI             -> println("Alright");
+    SAT, SUN        -> println("Hell yea!");
+}
+
+// Enums can be used as sum types and associated with values
+enum Stuff
+{
+    Int(int),
+    Flt(float),
+    Str(String)
 }

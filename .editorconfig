@@ -65,6 +65,7 @@ end_of_line=lf
 insert_final_newline=true
 indent_size=4
 indent_style=space
+max_line_length=180
 
 # Tab indentation (no size specified)
 [Makefile]
